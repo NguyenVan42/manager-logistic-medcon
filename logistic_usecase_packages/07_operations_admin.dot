@@ -1,0 +1,57 @@
+
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 7 - Quản trị vận hành nền"; labelloc=t; fontsize=20;
+  QuanLy [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Quản lý vận hành</TD></TR></TABLE>>];
+  DieuPhoi [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối viên</TD></TR></TABLE>>];
+  NhanSu [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Nhân sự / Admin</TD></TR></TABLE>>];
+  DoiTac [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Đối tác / nhà xe</TD></TR></TABLE>>];
+  KeToan [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Kế toán</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    QuanLyXe [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Quản lý hồ sơ xe\nnội bộ / thuê ngoài"];
+    BaoDuong [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Lịch & nhắc\nbảo dưỡng xe"];
+    GPSXe [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Theo dõi GPS\nvà nhiên liệu"];
+    LichSuXe [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Lịch sử vận hành\nsửa chữa / trạng thái xe"];
+    QuanLyShipper [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Quản lý hồ sơ\nshipper / tài xế / nhân viên"];
+    ChamCong [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Chấm công"];
+    HieuSuat [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Theo dõi hiệu suất\nlịch sử giao hàng"];
+    TinhLuong [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Tính lương\nthưởng phạt"];
+    QuanLyHopDong [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Quản lý hợp đồng\nkhách hàng / POS / shipper"];
+    KySo [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Ký số"];
+    LuuTruHopDong [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Lưu trữ & tra cứu\nhợp đồng"];
+    GiaHan [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Gia hạn tự động\nnhắc hết hiệu lực"];
+    PhanQuyenTang [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Phân quyền theo tầng\ntổng / tỉnh / hub"];
+    BaoCaoVanHanh [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Báo cáo năng lực\nvà hiệu suất vận hành"];
+  }
+
+  QuanLy -> QuanLyXe;
+  QuanLy -> QuanLyShipper;
+  QuanLy -> BaoCaoVanHanh;
+  DieuPhoi -> GPSXe;
+  DieuPhoi -> PhanQuyenTang;
+  NhanSu -> QuanLyShipper;
+  NhanSu -> ChamCong;
+  NhanSu -> QuanLyHopDong;
+  DoiTac -> QuanLyXe;
+  DoiTac -> QuanLyHopDong;
+  KeToan -> TinhLuong;
+  QuanLyXe -> BaoDuong [label="include"];
+  QuanLyXe -> GPSXe [label="include"];
+  QuanLyXe -> LichSuXe [label="include"];
+  QuanLyShipper -> ChamCong [label="include"];
+  QuanLyShipper -> HieuSuat [label="include"];
+  HieuSuat -> TinhLuong [label="include"];
+  QuanLyHopDong -> KySo [label="include"];
+  QuanLyHopDong -> LuuTruHopDong [label="include"];
+  QuanLyHopDong -> GiaHan [label="extend"];
+  PhanQuyenTang -> BaoCaoVanHanh [label="include"];
+
+}

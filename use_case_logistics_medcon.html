@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Case Packages - Medcon Logistic</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0d1729;
+      --card:#121f36;
+      --card2:#0e1a2f;
+      --line:rgba(125,211,252,.16);
+      --text:#edf4ff;
+      --muted:#a9b7d3;
+      --accent:#7dd3fc;
+      --accent2:#f59e0b;
+      --good:#34d399;
+      --bad:#fb7185;
+      --shadow:0 18px 48px rgba(0,0,0,.34);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(125,211,252,.14), transparent 30%),
+        radial-gradient(circle at 82% 16%, rgba(245,158,11,.11), transparent 26%),
+        radial-gradient(circle at 50% 90%, rgba(52,211,153,.09), transparent 28%),
+        linear-gradient(180deg, #060a13 0%, var(--bg) 100%);
+    }
+    .wrap{max-width:1720px;margin:0 auto;padding:28px 22px 40px}
+    .hero{
+      background:linear-gradient(135deg, rgba(18,31,54,.97), rgba(11,22,41,.94));
+      border:1px solid rgba(125,211,252,.16);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+    h1{margin:0 0 10px;font-size:34px;letter-spacing:.2px}
+    .sub{color:var(--muted);line-height:1.65;max-width:1120px}
+    .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .tag{
+      padding:8px 12px;border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(125,211,252,.14);
+      color:#dfe9fb;font-size:13px;
+    }
+    .layout{
+      display:grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .panel{
+      background:linear-gradient(180deg, rgba(18,31,54,.97), rgba(10,18,31,.96));
+      border:1px solid rgba(125,211,252,.14);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .panel-head{
+      padding:18px 20px 16px;
+      border-bottom:1px solid rgba(125,211,252,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+    .panel-head h2{
+      margin:0;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .panel-head h2::before{
+      content:"";
+      width:10px;height:10px;border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--good));
+      box-shadow:0 0 0 4px rgba(125,211,252,.11);
+      flex:0 0 auto;
+    }
+    .panel-body{padding:18px 18px 20px}
+    .note{color:var(--muted);line-height:1.62;font-size:14px}
+    .overview{
+      display:grid;
+      gap:14px;
+    }
+    .image-box{
+      background:linear-gradient(180deg, #ffffff, #f4f7fb);
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 12px 28px rgba(0,0,0,.18);
+    }
+    .image-box img{
+      display:block;
+      width:100%;
+      height:auto;
+      max-height:760px;
+      object-fit:contain;
+      background:#fff;
+    }
+    .caption{
+      padding:12px 14px;
+      background:rgba(255,255,255,.96);
+      color:#0f172a;
+      font-size:13px;
+      line-height:1.5;
+      border-top:1px solid rgba(148,163,184,.22);
+    }
+    .legend{
+      display:grid;
+      gap:10px;
+    }
+    .legend-item{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(125,211,252,.12);
+      border-radius:16px;
+      padding:14px;
+    }
+    .legend-item b{display:block;margin-bottom:4px}
+    .legend-item span{color:var(--muted);font-size:13px;line-height:1.45}
+    .section{
+      margin-top:18px;
+    }
+    .grid-packages{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:18px;
+    }
+    .pkg{
+      background:linear-gradient(180deg, rgba(18,31,54,.97), rgba(10,18,31,.96));
+      border:1px solid rgba(125,211,252,.14);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .pkg-head{
+      padding:16px 18px;
+      border-bottom:1px solid rgba(125,211,252,.12);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .pkg-title{margin:0;font-size:17px}
+    .pkg-sub{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.45}
+    .pkg-badge{
+      white-space:nowrap;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      background:rgba(125,211,252,.10);
+      border:1px solid rgba(125,211,252,.18);
+      color:#dff3ff;
+      flex:0 0 auto;
+    }
+    .pkg-body{padding:16px}
+    .pkg-img{
+      background:#fff;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,.24);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .pkg-img img{
+      display:block;
+      width:100%;
+      height:auto;
+      background:#fff;
+    }
+    .pkg-foot{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .full{grid-column:1 / -1}
+    .flow-list{
+      display:grid;
+      gap:12px;
+      margin-top:10px;
+    }
+    .flow-item{
+      display:grid;
+      grid-template-columns: 30px 1fr;
+      gap:12px;
+      align-items:flex-start;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(125,211,252,.12);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+    .flow-num{
+      width:30px;height:30px;border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:13px;
+      background:linear-gradient(135deg, rgba(125,211,252,.24), rgba(52,211,153,.20));
+      border:1px solid rgba(125,211,252,.18);
+      color:#fff;
+    }
+    .flow-item b{display:block;margin-bottom:3px}
+    .flow-item p{margin:0;color:var(--muted);font-size:13px;line-height:1.48}
+    .footer-note{
+      margin-top:18px;
+      padding:16px 18px;
+      background:linear-gradient(135deg, rgba(125,211,252,.08), rgba(245,158,11,.05));
+      border:1px solid rgba(125,211,252,.14);
+      border-radius:18px;
+      color:#d8e6ff;
+      line-height:1.6;
+    }
+    .diagram-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:18px;
+    }
+    .diagram{
+      background:#fff;
+      color:#0f172a;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.28);
+      overflow:hidden;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .diagram-head{
+      padding:14px 16px;
+      background:linear-gradient(180deg, #eff6ff, #ffffff);
+      border-bottom:1px solid rgba(148,163,184,.22);
+    }
+    .diagram-head b{display:block;font-size:15px;margin-bottom:4px}
+    .diagram-head span{display:block;color:#475569;font-size:13px;line-height:1.45}
+    .diagram-body{
+      padding:10px;
+      overflow:auto;
+      background:#fff;
+    }
+    .diagram-body pre{
+      margin:0;
+      white-space:pre;
+      font-family: Consolas, "Courier New", monospace;
+      font-size:13px;
+      line-height:1.55;
+      color:#0f172a;
+    }
+    .small{color:var(--muted);font-size:13px;line-height:1.55}
+    @media (max-width: 1200px){
+      .layout,.grid-packages{grid-template-columns:1fr}
+      .full{grid-column:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Use Case Packages - Medcon Logistic</h1>
+      <div class="sub">
+        Bộ sơ đồ này bám theo mô hình đã thống nhất: một quy trình chuẩn giữa hai điểm gần nhau, sau đó lặp lại thành chuỗi
+        đa tầng. Trang này hiển thị cả sơ đồ tổng quan và từng package use case riêng để bạn dùng làm nền cho tài liệu phân tích.
+      </div>
+      <div class="tags">
+        <div class="tag">Overall use case</div>
+        <div class="tag">7 package use case</div>
+        <div class="tag">Workflow đa tầng</div>
+        <div class="tag">Booking -> Điều phối -> Chuyến xe -> Giao cuối -> Công nợ</div>
+        <div class="tag">Quản lý chung</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Sơ Đồ Tổng Quan</h2>
+        </div>
+        <div class="panel-body overview">
+          <div class="image-box">
+            <img src="logistic_usecase_packages/overall_logistic_use_case_readable.png" alt="Overall Use Case Medcon" />
+            <div class="caption">
+              Sơ đồ tổng quan cho thấy toàn bộ hệ thống logistic Medcon được chia thành các cụm chức năng chính:
+              booking, điều phối lấy hàng, kế hoạch chuyến, chuyến xe thực tế, giao hàng cuối, công nợ đối soát và quản trị vận hành.
+            </div>
+          </div>
+          <div class="note">
+            Dựa trên mô hình này, mỗi chặng vận hành giữa hai điểm liền kề đều dùng chung một logic, chỉ khác vai trò tham gia,
+            điểm đầu, điểm cuối và quyền điều phối.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Nhóm Use Case Cốt Lõi</h2>
+        </div>
+        <div class="panel-body">
+          <div class="legend">
+            <div class="legend-item">
+              <b>1. Booking & Quản lý đơn hàng</b>
+              <span>Tạo booking thủ công, nhận đơn từ WMS/ERP, chỉnh sửa chuẩn hóa dữ liệu, phân loại đơn, kiểm tra bắt buộc và in phiếu gửi/QR.</span>
+            </div>
+            <div class="legend-item">
+              <b>2. Điều phối & Lấy hàng</b>
+              <span>Duyệt đơn, phân công theo tầng, ghi nhận thời gian, xác nhận người lấy, kiểm đếm và xử lý lấy hàng thất bại.</span>
+            </div>
+            <div class="legend-item">
+              <b>3. Phân tuyến & Kế hoạch chuyến</b>
+              <span>Gom đơn theo tỉnh, tính tải, xác định tuyến, hệ thống đề xuất kế hoạch chuyến để điều phối viên duyệt.</span>
+            </div>
+            <div class="legend-item">
+              <b>4. Chuyến xe thực tế</b>
+              <span>Xe nhận hàng, chờ xuất bến, đang chạy, bàn giao tại điểm trung chuyển và theo dõi tải/trễ/hủy/chuyển đổi tài xế.</span>
+            </div>
+            <div class="legend-item">
+              <b>5. Giao hàng cuối & Hoàn hàng</b>
+              <span>Giao đủ, giao một phần, giao thất bại, ký biên bản, sinh QR thanh toán, xuất hóa đơn và xử lý hoàn hàng.</span>
+            </div>
+            <div class="legend-item">
+              <b>6. Công nợ, COD & Đối soát</b>
+              <span>Theo dõi cước khách gửi, tiền thu hộ, nợ khách nhận, phí phải trả đối tác và kỳ đối soát.</span>
+            </div>
+            <div class="legend-item">
+              <b>7. Quản trị vận hành nền</b>
+              <span>Quản lý xe, shipper, chấm công, GPS, hợp đồng điện tử, bảo dưỡng, hiệu suất và tính lương.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Sequence Diagrams</h2>
+        </div>
+        <div class="panel-body">
+          <div class="small">
+            Phần dưới đây bám theo sườn sequence diagram bạn đưa, đã được làm sạch và sắp xếp lại để có thể dùng làm tài liệu phân tích hoặc chuyển thành UML sau này.
+          </div>
+
+          <div class="diagram-grid" style="margin-top:14px">
+            <div class="diagram">
+              <div class="diagram-head">
+                <b>1. Booking → Điều phối → Lấy hàng</b>
+                <span>Hệ thống tự validate và tính cước (internal), điều phối chỉ duyệt và phân công, tài xế là actor cuối cùng chuyển trạng thái thực thi.</span>
+              </div>
+              <div class="diagram-body">
+<pre>Khách gửi        Hệ thống        Điều phối        Tài xế
+    |                |                |              |
+    |---Tạo đơn----->|                |              |
+    |                |--validate----->|              |
+    |                |                |              |
+    |                |--tính cước--->(internal)      |
+    |                |                |              |
+    |                |--Đã tiếp nhận->|              |
+    |                |                |              |
+    |                |<--duyệt đơn----|              |
+    |                |                |              |
+    |                |<--phân công----|              |
+    |                |--------------->|              |
+    |                |                |--giao việc-->|
+    |                |                |              |
+    |                |                |<--confirm----|
+    |                |                |              |
+    |                |<-----Đang lấy hàng------------|
+    |                |                |              |
+    |                |                |--lấy hàng--> |
+    |                |                |              |
+    |                |<----update số kiện + ảnh------|
+    |                |                |              |
+    |                |--Đã lấy hàng----------------->|</pre>
+              </div>
+            </div>
+
+            <div class="diagram">
+              <div class="diagram-head">
+                <b>2. Phân tuyến → Kế hoạch chuyến → Chuyến xe</b>
+                <span>Kế hoạch chuyến là đề xuất, điều phối duyệt, sau đó sinh entity mới là chuyến xe thật.</span>
+              </div>
+              <div class="diagram-body">
+<pre>Điều phối        Hệ thống           Tài xế / Đối tác
+    |                |                     |
+    |---xem đơn----->|                     |
+    |                |                     |
+    |---phân tuyến--->|                     |
+    |                |--gom dữ liệu------->|
+    |                |                     |
+    |                |--đề xuất kế hoạch--|
+    |<---------------|                     |
+    |                |                     |
+    |---chỉnh sửa--->|                     |
+    |                |                     |
+    |---duyệt------->|                     |
+    |                |                     |
+    |                |--tạo chuyến xe---->|
+    |                |                     |
+    |                |--gán xe/tài xế---->|
+    |                |                     |
+    |                |<--confirm----------|
+    |                |                     |
+    |                |--Xe nhận hàng------|
+    |                |--Xe xuất bến-------|
+    |                |--Đang chạy---------|</pre>
+              </div>
+            </div>
+
+            <div class="diagram">
+              <div class="diagram-head">
+                <b>3. Giao hàng cuối + COD + Hoàn hàng</b>
+                <span>Giao đủ, giao một phần hoặc giao thất bại đều được ghi nhận rõ. COD và hóa đơn chỉ tính trên phần đã giao.</span>
+              </div>
+              <div class="diagram-body">
+<pre>Tài xế        Hệ thống        Khách nhận        Kế toán
+   |              |               |               |
+   |---đi giao--->|               |               |
+   |              |               |               |
+   |---kiểm đếm-->|               |               |
+   |              |               |               |
+   |---ký nhận------------------->|
+   |              |               |               |
+   |<--xác nhận-------------------|
+   |              |               |               |
+   |---update kết quả------------>|
+   |              |               |               |
+   |              |--tính COD---->|
+   |              |--tạo QR------->|
+   |              |               |---thanh toán->|
+   |              |               |               |
+   |              |--ghi nhận COD--------------->|
+   |              |               |               |
+   |              |--xuất hóa đơn--------------->|
+   |              |               |               |
+   |              |--cập nhật công nợ----------->|
+
+Nhánh mở rộng:
+- Giao một phần: giao 3/5 kiện -> 2 kiện hoàn, COD chỉ tính cho 3 kiện
+- Giao thất bại: chọn lý do -> tạo task giao lại / hoàn hàng</pre>
+              </div>
+            </div>
+
+            <div class="diagram">
+              <div class="diagram-head">
+                <b>4. Đối soát & Công nợ</b>
+                <span>Cuối kỳ hệ thống tổng hợp phát sinh, kế toán xem báo cáo, xuất hóa đơn, đối soát COD và thanh toán.</span>
+              </div>
+              <div class="diagram-body">
+<pre>Hệ thống        Kế toán        Khách gửi        Đối tác
+   |               |               |               |
+   |--tổng hợp---->|               |               |
+   |               |               |               |
+   |               |--xem báo cáo->|               |
+   |               |               |               |
+   |               |--xuất hóa đơn--------------->|
+   |               |               |               |
+   |               |--đối soát COD--------------->|
+   |               |               |               |
+   |               |--thanh toán----------------->|</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Chi Tiết Từng Package</h2>
+        </div>
+        <div class="panel-body">
+          <div class="grid-packages">
+            <div class="pkg">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 1 - Booking & Quản lý đơn hàng</div>
+                  <div class="pkg-sub">Tạo booking, nhận đơn từ kho, chuẩn hóa dữ liệu, phân loại đơn và in phiếu gửi / QR.</div>
+                </div>
+                <div class="pkg-badge">01</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/01_booking_order.png" alt="Booking order use case" /></div>
+                <div class="pkg-foot">Actor chính: khách gửi hàng, phần mềm kho, điều phối viên.</div>
+              </div>
+            </div>
+
+            <div class="pkg">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 2 - Điều phối & Lấy hàng</div>
+                  <div class="pkg-sub">Duyệt đơn, phân công theo tầng, ghi nhận lấy hàng thành công / thất bại, kiểm đếm kiện.</div>
+                </div>
+                <div class="pkg-badge">02</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/02_dispatch_pickup.png" alt="Dispatch pickup use case" /></div>
+                <div class="pkg-foot">Actor chính: điều phối công ty tổng, điều phối tỉnh, hub, tài xế / shipper.</div>
+              </div>
+            </div>
+
+            <div class="pkg">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 3 - Phân tuyến & Kế hoạch chuyến</div>
+                  <div class="pkg-sub">Gom hàng theo tỉnh, tính tải, xác định tuyến và gợi ý kế hoạch chuyến để duyệt.</div>
+                </div>
+                <div class="pkg-badge">03</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/03_trip_planning.png" alt="Trip planning use case" /></div>
+                <div class="pkg-foot">Actor chính: hệ thống gợi ý, điều phối viên, quản lý vận hành.</div>
+              </div>
+            </div>
+
+            <div class="pkg">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 4 - Chuyến xe thực tế & Vận chuyển</div>
+                  <div class="pkg-sub">Lập chuyến xe thật, gán xe / tài xế, xe nhận hàng, chờ xuất bến, đang chạy và bàn giao.</div>
+                </div>
+                <div class="pkg-badge">04</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/04_vehicle_trip.png" alt="Vehicle trip use case" /></div>
+                <div class="pkg-foot">Actor chính: điều phối viên, tài xế / phụ xe, nhà xe thuê ngoài, điểm trung chuyển.</div>
+              </div>
+            </div>
+
+            <div class="pkg full">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 5 - Giao hàng cuối, giao một phần & hoàn hàng</div>
+                  <div class="pkg-sub">Giao đủ, giao một phần, thu COD, sinh QR thanh toán, xuất hóa đơn, ký biên bản và xử lý hoàn hàng.</div>
+                </div>
+                <div class="pkg-badge">05</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/05_final_delivery_return.png" alt="Final delivery and return use case" /></div>
+                <div class="pkg-foot">Actor chính: tài xế giao hàng, khách nhận hàng, nhà cung cấp, kế toán, điều phối viên.</div>
+              </div>
+            </div>
+
+            <div class="pkg">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 6 - Công nợ, COD, hóa đơn & đối soát</div>
+                  <div class="pkg-sub">Theo dõi cước, COD, công nợ khách gửi / khách nhận và chi phí đối tác theo kỳ.</div>
+                </div>
+                <div class="pkg-badge">06</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/06_finance_reconciliation.png" alt="Finance reconciliation use case" /></div>
+                <div class="pkg-foot">Actor chính: kế toán, khách gửi, khách nhận, đối tác vận hành, quản lý.</div>
+              </div>
+            </div>
+
+            <div class="pkg">
+              <div class="pkg-head">
+                <div>
+                  <div class="pkg-title">Package 7 - Quản trị vận hành nền</div>
+                  <div class="pkg-sub">Quản lý xe, nhân sự, chấm công, GPS, bảo dưỡng, hợp đồng điện tử và tính lương.</div>
+                </div>
+                <div class="pkg-badge">07</div>
+              </div>
+              <div class="pkg-body">
+                <div class="pkg-img"><img src="logistic_usecase_packages/07_operations_admin.png" alt="Operations admin use case" /></div>
+                <div class="pkg-foot">Actor chính: quản lý vận hành, admin, nhân sự, kế toán, đối tác.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Luồng Mô Hình Để Vẽ Sơ Đồ Sau Này</h2>
+        </div>
+        <div class="panel-body">
+          <div class="flow-list">
+            <div class="flow-item">
+              <div class="flow-num">1</div>
+              <div>
+                <b>Booking là điểm khởi đầu của dữ liệu vận chuyển</b>
+                <p>Khách gửi tạo đơn hoặc đẩy đơn từ kho. Hệ thống logistic là nguồn sự thật cuối cùng và chuẩn hóa dữ liệu đầu vào.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">2</div>
+              <div>
+                <b>Điều phối lấy hàng là giai đoạn chờ xác nhận chuỗi tầng</b>
+                <p>Đơn ở trạng thái Đã tiếp nhận, được phân công theo từng tầng mà không can thiệp chéo quyền.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">3</div>
+              <div>
+                <b>Đóng hàng / kiểm đếm kiện là lớp kiểm soát bắt buộc</b>
+                <p>Ghi nhận số kiện, tình trạng kiện, ảnh hiện trạng và chênh lệch so với booking.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">4</div>
+              <div>
+                <b>Kế hoạch chuyến là bản đề xuất để điều phối viên duyệt</b>
+                <p>Hệ thống gợi ý theo tải, tỉnh, tuyến và cut-off time. Điều phối viên chỉ kiểm tra và chốt.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">5</div>
+              <div>
+                <b>Chuyến xe thực tế là lớp thực thi</b>
+                <p>Xe nhận hàng, chờ xuất bến, đang chạy và bàn giao tại các điểm trung chuyển hoặc điểm nhận kế tiếp.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">6</div>
+              <div>
+                <b>Giao cuối xử lý cả giao đủ, giao một phần và hoàn hàng</b>
+                <p>Ký biên bản, ký số trên app, sinh QR thanh toán, xuất hóa đơn và ghi nhận kết quả giao.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">7</div>
+              <div>
+                <b>Công nợ và quản trị nền là lớp quản lý dài hạn</b>
+                <p>Theo dõi cước, COD, đối tác, xe, shipper, hợp đồng điện tử, bảo dưỡng, GPS và tính lương.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Ghi Chú Thiết Kế</h2>
+        </div>
+        <div class="panel-body">
+          <div class="note">
+            Bộ sơ đồ hiện tại đã đi đúng hướng “một quy trình chuẩn cho hai điểm liền kề”. Điều này rất tốt vì sau này bạn chỉ cần
+            tái dùng cùng logic cho nhiều tầng khác nhau, thay vì viết một sơ đồ mới cho mỗi tuyến.
+          </div>
+          <div class="footer-note">
+            <b>Gợi ý sử dụng:</b><br/>
+            - Dùng ảnh tổng quan làm slide mở đầu.<br/>
+            - Dùng từng package cho phần use case chi tiết.<br/>
+            - Dùng tài liệu markdown trước đó để viết mô tả nghiệp vụ và sequence diagram.
+          </div>
+          <div class="note" style="margin-top:14px">
+            Nếu bạn muốn, bước tiếp theo mình có thể làm tiếp một trang HTML riêng cho <b>sequence diagram</b> theo từng package,
+            hoặc mình có thể ghép thêm các file SVG/PNG thành một bộ gallery có nút chuyển qua lại giữa các package.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

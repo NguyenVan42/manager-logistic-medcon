@@ -1,0 +1,46 @@
+
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 3 - Phân tuyến & Kế hoạch chuyến"; labelloc=t; fontsize=20;
+  HeThong [shape=component, label="Hệ thống\ngợi ý tự động"];
+  DieuPhoi [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối viên</TD></TR></TABLE>>];
+  QuanLy [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Quản lý vận hành</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    TongHopDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tổng hợp đơn\nđã lấy hàng"];
+    GomTinh [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Gom hàng theo tỉnh\n/ điểm đến"];
+    TinhTai [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tính tải dự kiến\nkhối lượng / thể tích / số kiện"];
+    XacDinhTuyen [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Xác định tuyến\nghép tỉnh và thứ tự điểm"];
+    GoiYKeHoach [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Gợi ý kế hoạch chuyến"];
+    ChoDuyet [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Tạo kế hoạch\ntrạng thái Chờ duyệt"];
+    XemKeHoach [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Xem kế hoạch chuyến"];
+    ChinhSuaKeHoach [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Chỉnh sửa kế hoạch\nđơn / tuyến / xe dự kiến"];
+    DuyetKeHoach [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Duyệt kế hoạch\ntrạng thái Đã duyệt"];
+    TaoChuyenThat [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Chuyển thành\nchuyến xe thật"];
+    KiemSoatSLA [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Kiểm soát SLA\ncut-off / loại hàng / nhiệt độ"];
+  }
+
+  HeThong -> TongHopDon;
+  HeThong -> GoiYKeHoach;
+  DieuPhoi -> XemKeHoach;
+  DieuPhoi -> ChinhSuaKeHoach;
+  DieuPhoi -> DuyetKeHoach;
+  QuanLy -> XemKeHoach;
+  QuanLy -> KiemSoatSLA;
+  TongHopDon -> GomTinh [label="include"];
+  GomTinh -> TinhTai [label="include"];
+  TinhTai -> XacDinhTuyen [label="include"];
+  XacDinhTuyen -> GoiYKeHoach [label="include"];
+  GoiYKeHoach -> KiemSoatSLA [label="include"];
+  GoiYKeHoach -> ChoDuyet [label="include"];
+  XemKeHoach -> ChinhSuaKeHoach [label="extend"];
+  DuyetKeHoach -> TaoChuyenThat [label="include"];
+
+}

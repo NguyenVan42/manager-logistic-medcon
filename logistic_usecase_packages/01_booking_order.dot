@@ -1,0 +1,42 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 1 - Booking & Quản lý đơn hàng"; labelloc=t; fontsize=20;
+  KhachGui [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Khách gửi hàng</TD></TR></TABLE>>];
+  PhanMemKho [shape=component, label="Phần mềm kho\n(WMS/ERP)"];
+  DieuPhoi [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối viên</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    TaoBooking [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tạo booking\nthủ công"];
+    DayDonKho [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Nhận đơn từ\nphần mềm kho"];
+    ChinhSuaDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Chỉnh sửa / chuẩn hóa\ndữ liệu vận hành"];
+    PhanLoaiDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Phân loại đơn\nDịch vụ - hàng hóa - điều kiện"];
+    KiemTraBatBuoc [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Kiểm tra trường bắt buộc\nkhối lượng / kích thước"];
+    TinhCuoc [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Tự động tính giá cước\ntheo công thức"];
+    TiepNhan [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tiếp nhận đơn\ntrạng thái Đã tiếp nhận"];
+    InPhieu [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="In phiếu gửi"];
+    TaoQRDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tạo QR tổng đơn"];
+    TaoQRKien [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tạo QR từng kiện"];
+    TheoDoiDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Theo dõi trạng thái\nđơn / kiện"];
+  }
+
+  KhachGui -> TaoBooking;
+  PhanMemKho -> DayDonKho;
+  TaoBooking -> KiemTraBatBuoc [label="<<include>>"];
+  DayDonKho -> ChinhSuaDon [label="<<include>>"];
+  ChinhSuaDon -> KiemTraBatBuoc [label="<<include>>"];
+  KiemTraBatBuoc -> PhanLoaiDon [label="<<include>>"];
+  PhanLoaiDon -> TinhCuoc [label="<<include>>"];
+  TinhCuoc -> TiepNhan [label="<<include>>"];
+  KhachGui -> InPhieu;
+  KhachGui -> TaoQRDon;
+  KhachGui -> TaoQRKien;
+  DieuPhoi -> TheoDoiDon;
+  KhachGui -> TheoDoiDon;
+}

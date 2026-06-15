@@ -1,0 +1,59 @@
+
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 2 - Điều phối & Lấy hàng"; labelloc=t; fontsize=20;
+  DieuPhoiTong [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối công ty tổng</TD></TR></TABLE>>];
+  DieuPhoiTinh [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối công ty tỉnh</TD></TR></TABLE>>];
+  Hub [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Hub liên kết</TD></TR></TABLE>>];
+  TaiXe [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Tài xế / shipper</TD></TR></TABLE>>];
+  QuanLy [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Quản lý vận hành</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    DuyetDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Duyệt đơn\nđã tiếp nhận"];
+    PhanCongCapDuoi [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Phân công xuống\ncấp dưới"];
+    PhanCongNhanVien [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Phân công nhân viên\n/ tài xế lấy hàng"];
+    TiepNhanTang [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Tiếp nhận tại\ntừng tầng"];
+    GhiNhanTime [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Ghi nhận thời gian\nnhận - xác nhận - xử lý"];
+    XacNhanLay [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Xác nhận có người\nlấy hàng trực tiếp"];
+    DangLayHang [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Cập nhật trạng thái\nĐang lấy hàng"];
+    KiemDem [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Kiểm đếm số kiện"];
+    GhiTinhTrang [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Ghi tình trạng kiện\nảnh / ghi chú"];
+    CapNhatSaiLech [shape=ellipse, style="filled", fillcolor="#FFF3F0", color="#C44D32", label="Ghi nhận sai lệch\nthiếu / dư / hỏng"];
+    LayThatBai [shape=ellipse, style="filled", fillcolor="#FFF3F0", color="#C44D32", label="Cập nhật lấy hàng\nkhông thành công"];
+    HuyLay [shape=ellipse, style="filled", fillcolor="#FFF3F0", color="#C44D32", label="Hủy lấy\nsau điều kiện thất bại"];
+    BanGiaoNoiBo [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Bàn giao nội bộ\nvề điểm nhận"];
+    DaLayHang [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Cập nhật trạng thái\nĐã lấy hàng"];
+    TheoDoiNghen [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Theo dõi điểm nghẽn\nđiều phối"];
+  }
+
+  DieuPhoiTong -> DuyetDon;
+  DieuPhoiTong -> PhanCongCapDuoi;
+  DieuPhoiTong -> PhanCongNhanVien;
+  DieuPhoiTinh -> TiepNhanTang;
+  DieuPhoiTinh -> PhanCongCapDuoi;
+  DieuPhoiTinh -> PhanCongNhanVien;
+  Hub -> TiepNhanTang;
+  Hub -> PhanCongNhanVien;
+  TaiXe -> XacNhanLay;
+  TaiXe -> KiemDem;
+  TaiXe -> GhiTinhTrang;
+  TaiXe -> LayThatBai;
+  TaiXe -> BanGiaoNoiBo;
+  QuanLy -> TheoDoiNghen;
+  DuyetDon -> GhiNhanTime [label="include"];
+  PhanCongCapDuoi -> GhiNhanTime [label="include"];
+  TiepNhanTang -> GhiNhanTime [label="include"];
+  XacNhanLay -> DangLayHang [label="include"];
+  KiemDem -> GhiTinhTrang [label="include"];
+  GhiTinhTrang -> CapNhatSaiLech [label="extend"];
+  LayThatBai -> HuyLay [label="extend"];
+  BanGiaoNoiBo -> DaLayHang [label="include"];
+
+}

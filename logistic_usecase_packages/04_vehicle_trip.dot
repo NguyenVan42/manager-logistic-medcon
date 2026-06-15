@@ -1,0 +1,53 @@
+
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 4 - Chuyến xe thực tế & Vận chuyển"; labelloc=t; fontsize=20;
+  DieuPhoi [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối viên</TD></TR></TABLE>>];
+  TaiXe [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Tài xế / phụ xe</TD></TR></TABLE>>];
+  NhaXe [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Nhà xe thuê ngoài</TD></TR></TABLE>>];
+  DiemTrungChuyen [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điểm trung chuyển</TD></TR></TABLE>>];
+  QuanLy [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Quản lý vận hành</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    LapChuyen [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Lập chuyến xe thật\ntừ kế hoạch đã duyệt"];
+    GanXeTaiXe [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Gán xe thật\nvà tài xế thật"];
+    QuanLyDanhSachDon [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Quản lý danh sách đơn\nthuộc chuyến"];
+    XeNhanHang [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Cập nhật\nXe nhận hàng"];
+    ChoXuatBen [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Cập nhật\nXe chờ xuất bến"];
+    DangChay [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Cập nhật\nĐang chạy"];
+    DonDangVanChuyen [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Cập nhật đơn\nĐang vận chuyển"];
+    DenTrungChuyen [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Cập nhật\nĐã đến điểm trung chuyển"];
+    BanGiao [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Bàn giao hàng\ntại điểm đến"];
+    HoanThanh [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Hoàn thành chuyến"];
+    HuyChuyen [shape=ellipse, style="filled", fillcolor="#FFF3F0", color="#C44D32", label="Hủy chuyến\nvà ghi lý do"];
+    TheoDoiTai [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Theo dõi mức tải\ntrễ giờ / lịch sử thay đổi"];
+  }
+
+  DieuPhoi -> LapChuyen;
+  DieuPhoi -> GanXeTaiXe;
+  DieuPhoi -> HuyChuyen;
+  TaiXe -> XeNhanHang;
+  TaiXe -> ChoXuatBen;
+  TaiXe -> DangChay;
+  TaiXe -> DenTrungChuyen;
+  TaiXe -> BanGiao;
+  NhaXe -> GanXeTaiXe;
+  DiemTrungChuyen -> BanGiao;
+  QuanLy -> TheoDoiTai;
+  LapChuyen -> GanXeTaiXe [label="include"];
+  LapChuyen -> QuanLyDanhSachDon [label="include"];
+  XeNhanHang -> ChoXuatBen;
+  ChoXuatBen -> DangChay;
+  DangChay -> DonDangVanChuyen [label="include"];
+  DenTrungChuyen -> BanGiao [label="include"];
+  BanGiao -> HoanThanh [label="extend"];
+  HuyChuyen -> TheoDoiTai [label="include"];
+
+}

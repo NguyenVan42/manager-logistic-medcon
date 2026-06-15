@@ -1,0 +1,50 @@
+
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 6 - Công nợ, COD, hóa đơn & đối soát"; labelloc=t; fontsize=20;
+  KeToan [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Kế toán</TD></TR></TABLE>>];
+  KhachGui [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Khách gửi / nhà cung cấp</TD></TR></TABLE>>];
+  KhachNhan [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Khách nhận hàng</TD></TR></TABLE>>];
+  DoiTac [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Công ty tỉnh / Hub / Nhà xe</TD></TR></TABLE>>];
+  QuanLy [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Quản lý vận hành</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    GhiCuocDuKien [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Ghi nhận cước\nvận chuyển dự kiến"];
+    TheoDoiCongNoGui [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Theo dõi công nợ\nkhách gửi"];
+    GhiThuCOD [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Ghi nhận tiền\nthu hộ COD"];
+    TheoDoiNoNhan [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Theo dõi khoản\nkhách nhận chưa trả"];
+    TinhPhiNoiBo [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Tính phí phải trả\ntỉnh / hub / xe ngoài"];
+    DoiSoatKy [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Chốt đối soát\ntheo kỳ"];
+    TaoBangKe [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Tạo bảng kê\nthanh toán"];
+    XuatHoaDon [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Xuất hóa đơn\n/ biên bản đối soát"];
+    DoiTruHoanTra [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Đối trừ / hoàn trả\ntiền COD cho khách gửi"];
+    BaoCaoTaiChinh [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Báo cáo công nợ\nCOD / phải trả đối tác"];
+  }
+
+  KeToan -> GhiCuocDuKien;
+  KeToan -> TheoDoiCongNoGui;
+  KeToan -> GhiThuCOD;
+  KeToan -> TinhPhiNoiBo;
+  KeToan -> DoiSoatKy;
+  KeToan -> XuatHoaDon;
+  KhachGui -> TheoDoiCongNoGui;
+  KhachGui -> DoiTruHoanTra;
+  KhachNhan -> GhiThuCOD;
+  KhachNhan -> TheoDoiNoNhan;
+  DoiTac -> TinhPhiNoiBo;
+  QuanLy -> BaoCaoTaiChinh;
+  GhiCuocDuKien -> TheoDoiCongNoGui [label="include"];
+  GhiThuCOD -> TheoDoiNoNhan [label="extend"];
+  DoiSoatKy -> TaoBangKe [label="include"];
+  DoiSoatKy -> XuatHoaDon [label="include"];
+  DoiSoatKy -> DoiTruHoanTra [label="include"];
+  TinhPhiNoiBo -> BaoCaoTaiChinh [label="include"];
+
+}

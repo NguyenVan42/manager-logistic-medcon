@@ -1,0 +1,61 @@
+
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.35", nodesep="0.45", ranksep="0.7", splines=ortho, fontname="DejaVu Sans"];
+  node  [fontname="DejaVu Sans", fontsize=12];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", arrowsize=0.7];
+  actor [shape=plaintext];
+  usecase [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", penwidth=1.2];
+  system [shape=box, style="rounded", color="#9AA7B3", penwidth=1.2];
+
+  label="Package 5 - Giao hàng cuối, giao một phần & hoàn hàng"; labelloc=t; fontsize=20;
+  TaiXe [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Tài xế giao hàng</TD></TR></TABLE>>];
+  KhachNhan [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Khách nhận hàng</TD></TR></TABLE>>];
+  NhaCungCap [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Nhà cung cấp\n/người bán</TD></TR></TABLE>>];
+  DieuPhoi [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Điều phối viên</TD></TR></TABLE>>];
+  KeToan [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD><FONT POINT-SIZE="24">👤</FONT></TD></TR><TR><TD>Kế toán</TD></TR></TABLE>>];
+
+  subgraph cluster_sys {
+    label="Hệ thống Logistic Medcon"; style="rounded,dashed"; color="#B8C4D0";
+    GiaoHang [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Thực hiện giao hàng"];
+    KiemDemGiao [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Kiểm đếm hàng\nkhi giao"];
+    KyBienBan [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Ký biên bản\ngiấy / điện tử"];
+    LuuBangChung [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Lưu ảnh, chữ ký,\nthời gian, vị trí"];
+    GiaoThanhCong [shape=ellipse, style="filled", fillcolor="#EEF8F1", color="#2E8B57", label="Giao thành công\nĐã giao hàng"];
+    GiaoMotPhan [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Giao một phần\nghi số kiện giao / hoàn"];
+    GiaoThatBai [shape=ellipse, style="filled", fillcolor="#FFF3F0", color="#C44D32", label="Giao không thành công\nghi lý do"];
+    ThuCOD [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Thu COD nếu có"];
+    SinhQRThanhToan [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Sinh QR thanh toán\ncho phần đã giao"];
+    XuatHoaDon [shape=ellipse, style="filled", fillcolor="#FFF9F0", color="#C47A00", label="Xuất hóa đơn\ncho phần đã giao"];
+    GiaoLai [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Lên lịch giao lại"];
+    HoanHang [shape=ellipse, style="filled", fillcolor="#FFF3F0", color="#C44D32", label="Tạo yêu cầu\nhoàn hàng"];
+    LuuKhoTam [shape=ellipse, style="filled", fillcolor="#F7FAFF", color="#3B6EA8", label="Chuyển điểm\nlưu kho tạm"];
+  }
+
+  TaiXe -> GiaoHang;
+  TaiXe -> KiemDemGiao;
+  TaiXe -> KyBienBan;
+  TaiXe -> LuuBangChung;
+  KhachNhan -> KyBienBan;
+  KhachNhan -> ThuCOD;
+  NhaCungCap -> SinhQRThanhToan;
+  DieuPhoi -> GiaoLai;
+  DieuPhoi -> HoanHang;
+  DieuPhoi -> LuuKhoTam;
+  KeToan -> ThuCOD;
+  KeToan -> XuatHoaDon;
+  GiaoHang -> KiemDemGiao [label="include"];
+  KiemDemGiao -> KyBienBan [label="include"];
+  KyBienBan -> LuuBangChung [label="include"];
+  LuuBangChung -> GiaoThanhCong [label="extend"];
+  LuuBangChung -> GiaoMotPhan [label="extend"];
+  LuuBangChung -> GiaoThatBai [label="extend"];
+  GiaoThanhCong -> ThuCOD [label="extend"];
+  GiaoMotPhan -> ThuCOD [label="extend"];
+  ThuCOD -> SinhQRThanhToan [label="include"];
+  ThuCOD -> XuatHoaDon [label="include"];
+  GiaoMotPhan -> HoanHang [label="include"];
+  GiaoThatBai -> GiaoLai [label="extend"];
+  GiaoThatBai -> HoanHang [label="extend"];
+  GiaoThatBai -> LuuKhoTam [label="extend"];
+
+}
